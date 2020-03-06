@@ -1,3 +1,6 @@
+import matplotlib as plt
+import math
+
 offset = 0
 avg_sample_val = 0
 mode = 0
@@ -44,10 +47,9 @@ for elem in d:
     offset += d[elem] / data_len
     d[elem] = round(offset, 3)
 
-# plt.boxplot(x)
-# plt.show()
-# plt.hist(x, bins=10)
-# plt.show()
+#plt.boxplot(x)
+#plt.hist(x, bins=10)
+#plt.show()
 # https://habr.com/ru/post/267123/
 
 square_diff = sum((elem - avg_sample_val) ** 2 for elem in x)
@@ -70,3 +72,20 @@ print('Kurtosis = ', kurtosis)
 print('Skewness = ', skewness)
 print('Min value = ', x[0])
 print('Max value = ', x[len(x) - 1])
+
+# Maxim B #
+
+
+
+print(avg_sample_val); # выборочное среднее
+
+sum_x_minus_x_delta = 0
+
+for elem in x:
+    sum_x_minus_x_delta += (elem - avg_sample_val) ** 2
+
+dispersion = sum_x_minus_x_delta * (1/(len(x)-1)) 
+dispersion = math.sqrt(dispersion)
+
+print(dispersion) # выборочная исправленная дисперсия
+
