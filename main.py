@@ -47,9 +47,9 @@ for elem in d:
     offset += d[elem] / data_len
     d[elem] = round(offset, 3)
 
-#plt.boxplot(x)
-#plt.hist(x, bins=10)
-#plt.show()
+# plt.boxplot(x)
+# plt.hist(x, bins=10)
+# plt.show()
 # https://habr.com/ru/post/267123/
 
 square_diff = sum((elem - avg_sample_val) ** 2 for elem in x)
@@ -75,17 +75,60 @@ print('Max value = ', x[len(x) - 1])
 
 # Maxim B #
 
-
-
-print(avg_sample_val); # выборочное среднее
+# выборочное среднее
+# print(avg_sample_val)
 
 sum_x_minus_x_delta = 0
-
 for elem in x:
     sum_x_minus_x_delta += (elem - avg_sample_val) ** 2
 
-dispersion = sum_x_minus_x_delta * (1/(len(x)-1)) 
-dispersion = math.sqrt(dispersion)
+# выборочная исправленная дисперсия
+dispersion = sum_x_minus_x_delta * (1/(len(x)-1))
+# выборочное исправленное среднее квадратичное отклонение
+corrected_deviation = math.sqrt(dispersion)
 
-print(dispersion) # выборочная исправленная дисперсия
+# print(corrected_deviation)
 
+# расчитываем теоретические частоты n по формуле
+
+u = []
+for elem in x:
+    u.append((elem - avg_sample_val)/corrected_deviation)
+print(u[0])
+first_p = x[0]
+sum_p = 0
+i = 0
+for elem in range(len(x)-1):
+    sum_p = sum_p + (x[elem+1] - x[elem])
+
+# среднее значение шага между вариантами
+h = round((round(sum_p, 2) / (len(x)-1)), 3)
+# print(h)
+
+fi_of_u = []
+for elem in u:
+    fi_of_u.append(((1/(math.sqrt(2*math.pi))) *
+                    math.exp(((elem * (-1))**2) / 2)))
+
+# print(fi_of_u[0])
+n_i_o = []
+for elem in fi_of_u:
+    n_i_o.append(((len(x) * h) / corrected_deviation)*elem)
+
+# print(n_i_o[0])
+
+n_i_minus_n_i_o = []
+for elem in n_i_o:
+    n_i_minus_n_i_o.append((((1 - elem)**2)/elem))
+
+# print(n_i_minus_n_i_o[0])
+
+x_observed = sum(n_i_minus_n_i_o)
+
+# степеней свободы 99 n-1, найдем критическое значение критического распределения по таблице (excel =ХИ2ОБР(0,025;99))
+x_critical = 128.422
+
+print("x^2 критическое значение", x_critical)
+print("x^2 наблюдаемое значение", round(x_observed, 3))
+if(x_observed < x_critical):
+    print("нулевую гипотезу о нормальном распределении можно принять при данном уровне значимости равном 0.025")
