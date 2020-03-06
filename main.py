@@ -6,8 +6,12 @@ avg_sample_val = 0
 mode = 0
 median = 0
 
-x = [17.1, 21.4, 15.9, 19.1, 22.4, 20.7, 17.9, 18.6, 21.8, 16.1, 19.1, 20.5, 14.2, 16.9, 17.8, 18.1, 19.1, 15.8, 18.8, 17.2, 16.2, 17.3, 22.5, 19.9, 21.1, 15.1, 17.7, 19.8, 14.9, 20.5, 17.5, 19.2, 18.5, 15.7, 14.0, 18.6, 21.2, 16.8, 19.3, 17.8, 18.8, 14.3,
-     17.1, 19.5, 16.3, 20.3, 17.9, 23.0, 17.2, 15.2, 15.6, 17.4, 21.3, 22.1, 20.1, 14.5, 19.3, 18.4, 16.7, 18.2, 16.4, 18.7, 14.3, 18.2, 19.1, 15.3, 21.5, 17.2, 22.6, 20.4, 22.8, 17.5, 20.2, 15.5, 21.6, 18.1, 20.5, 14.0, 18.9, 16.5, 20.8, 16.6, 18.3, 21.7]
+x = [17.1, 21.4, 15.9, 19.1, 22.4, 20.7, 17.9, 18.6, 21.8, 16.1, 19.1, 20.5, 14.2, 16.9, 17.8, 18.1, 19.1, 15.8, 18.8,
+     17.2, 16.2, 17.3, 22.5, 19.9, 21.1, 15.1, 17.7, 19.8, 14.9, 20.5, 17.5, 19.2, 18.5, 15.7, 14.0, 18.6, 21.2, 16.8,
+     19.3, 17.8, 18.8, 14.3,
+     17.1, 19.5, 16.3, 20.3, 17.9, 23.0, 17.2, 15.2, 15.6, 17.4, 21.3, 22.1, 20.1, 14.5, 19.3, 18.4, 16.7, 18.2, 16.4,
+     18.7, 14.3, 18.2, 19.1, 15.3, 21.5, 17.2, 22.6, 20.4, 22.8, 17.5, 20.2, 15.5, 21.6, 18.1, 20.5, 14.0, 18.9, 16.5,
+     20.8, 16.6, 18.3, 21.7]
 
 data_len = len(x)
 x.sort()
@@ -56,9 +60,9 @@ square_diff = sum((elem - avg_sample_val) ** 2 for elem in x)
 sample_variance = square_diff / data_len
 standard_error = sample_variance ** (1 / 2)
 standard_deviation = (square_diff / (data_len - 1)) ** (1 / 2)
-kurtosis = (sum((elem - avg_sample_val)**4 for elem in x) /
+kurtosis = (sum((elem - avg_sample_val) ** 4 for elem in x) /
             data_len) / (standard_deviation ** 4) - 3
-skewness = (sum((elem - avg_sample_val)**3 for elem in x) /
+skewness = (sum((elem - avg_sample_val) ** 3 for elem in x) /
             data_len) / (standard_deviation ** 3)
 
 print('Average sample value = ', round(avg_sample_val, 3))
@@ -83,7 +87,7 @@ for elem in x:
     sum_x_minus_x_delta += (elem - avg_sample_val) ** 2
 
 # выборочная исправленная дисперсия
-dispersion = sum_x_minus_x_delta * (1/(len(x)-1))
+dispersion = sum_x_minus_x_delta * (1 / (len(x) - 1))
 # выборочное исправленное среднее квадратичное отклонение
 corrected_deviation = math.sqrt(dispersion)
 
@@ -93,33 +97,33 @@ corrected_deviation = math.sqrt(dispersion)
 
 u = []
 for elem in x:
-    u.append((elem - avg_sample_val)/corrected_deviation)
+    u.append((elem - avg_sample_val) / corrected_deviation)
 print(u[0])
 first_p = x[0]
 sum_p = 0
 i = 0
-for elem in range(len(x)-1):
-    sum_p = sum_p + (x[elem+1] - x[elem])
+for elem in range(len(x) - 1):
+    sum_p = sum_p + (x[elem + 1] - x[elem])
 
 # среднее значение шага между вариантами
-h = round((round(sum_p, 2) / (len(x)-1)), 3)
+h = round((round(sum_p, 2) / (len(x) - 1)), 3)
 # print(h)
 
 fi_of_u = []
 for elem in u:
-    fi_of_u.append(((1/(math.sqrt(2*math.pi))) *
-                    math.exp(((elem * (-1))**2) / 2)))
+    fi_of_u.append(((1 / (math.sqrt(2 * math.pi))) *
+                    math.exp(((elem * (-1)) ** 2) / 2)))
 
 # print(fi_of_u[0])
 n_i_o = []
 for elem in fi_of_u:
-    n_i_o.append(((len(x) * h) / corrected_deviation)*elem)
+    n_i_o.append(((len(x) * h) / corrected_deviation) * elem)
 
 # print(n_i_o[0])
 
 n_i_minus_n_i_o = []
 for elem in n_i_o:
-    n_i_minus_n_i_o.append((((1 - elem)**2)/elem))
+    n_i_minus_n_i_o.append((((1 - elem) ** 2) / elem))
 
 # print(n_i_minus_n_i_o[0])
 
@@ -130,5 +134,34 @@ x_critical = 128.422
 
 print("x^2 критическое значение", x_critical)
 print("x^2 наблюдаемое значение", round(x_observed, 3))
-if(x_observed < x_critical):
+if (x_observed < x_critical):
     print("нулевую гипотезу о нормальном распределении можно принять при данном уровне значимости равном 0.025")
+
+
+def standardDeviation():
+    sum = 0
+    for element in x:
+        sum = sum + (element - avg_sample_val) ** 2
+    return sum / len(x)
+
+
+def correctedDeviation():
+    sum = 0
+    for element in x:
+        sum = sum + (element - avg_sample_val) ** 2
+    return math.sqrt((sum / len(x)) ** 2)
+
+
+t = 2  # LaplaceFunction(x) = 0.95/2 => using Laplace Values Table value t = 2
+standart_o = standardDeviation()  # Среднее квадратическое отклонение
+leftBorderExpectation = avg_sample_val - (
+            t * standart_o / math.sqrt(len(x)))  # Левая граница доверительного интервала матожидания
+rightBorderExpectation = avg_sample_val + (
+            t * standart_o / math.sqrt(len(x)))  # Правая граница доверительного интервала матожидания
+print('Confidence interval for mathematical expectation: ', leftBorderExpectation, ' < a < ', rightBorderExpectation)
+
+q = 0.143  # Table value
+corrected_o = correctedDeviation()  # Исправленное среднее квадратическое отклонение
+leftBorderDeviation = corrected_o * (1 - q)  # Левая граница доверительного интервала среднеквадратичного отклонения
+rightBorderDeviation = corrected_o * (1 + q)  # Правая граница доверительного интервала среднеквадратичного отклонения
+print('Confidence interval for standard deviation: ', leftBorderDeviation, ' < o < ', rightBorderDeviation)
