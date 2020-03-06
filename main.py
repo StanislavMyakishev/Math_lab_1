@@ -1,3 +1,5 @@
+import math
+
 offset = 0
 avg_sample_val = 0
 mode = 0
@@ -67,3 +69,27 @@ print('Kurtosis = ', kurtosis)
 print('Skewness = ', skewness)
 print('Min value = ', x[0])
 print('Max value = ', x[len(x) - 1])
+
+def standardDeviation():
+    sum = 0
+    for element in x:
+        sum = sum + (element - avg_sample_val)**2
+    return sum / len(x)
+
+def correctedDeviation():
+    sum = 0
+    for element in x:
+        sum = sum + (element - avg_sample_val)**2
+    return math.sqrt((sum / len(x))**2)
+
+t = 2 # LaplaceFunction(x) = 0.95/2 => using Laplace Values Table value t = 2
+standart_o = standardDeviation() # Среднее квадратическое отклонение
+leftBorderExpectation = avg_sample_val - (t*standart_o/math.sqrt(len(x))) # Левая граница доверительного интервала матожидания
+rightBorderExpectation = avg_sample_val + (t*standart_o/math.sqrt(len(x))) # Правая граница доверительного интервала матожидания
+print('Confidence interval for mathematical expectation: ', leftBorderExpectation, ' < a < ', rightBorderExpectation)
+
+q = 0.143 # Table value
+corrected_o = correctedDeviation() # Исправленное среднее квадратическое отклонение
+leftBorderDeviation = corrected_o * (1 - q) # Левая граница доверительного интервала среднеквадратичного отклонения
+rightBorderDeviation = corrected_o * (1 + q) # Правая граница доверительного интервала среднеквадратичного отклонения
+print('Confidence interval for standard deviation: ', leftBorderDeviation, ' < o < ', rightBorderDeviation)
